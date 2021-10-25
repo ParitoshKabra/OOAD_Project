@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'shopBackend',
+    'ckeditor',
     'allauth',
+    'rest_framework',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google'
