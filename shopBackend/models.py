@@ -11,13 +11,17 @@ class Item(models.Model):
     price = models.FloatField()
     added_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="cart_items")
-    availability_status = models.BooleanField(default=True)
-    category = models.CharField(default=None, max_length=255)
-    notif_enabled = models.BooleanField(default=False)
     apiLink= models.CharField(max_length=255)
     adddedOn= models.DateTimeField(auto_now_add=True)
+    category = models.CharField(default=None, max_length=255)
     priority= models.IntegerField(default= 0)
+
+    availability_status = models.BooleanField(default=True)
+
+
+    notif_enabled = models.BooleanField(default=False)
     
+
 
 
 
