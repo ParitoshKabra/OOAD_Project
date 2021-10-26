@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 class Item(models.Model):
     title = models.CharField(max_length=255)
-    descp = RichTextField()
+    name = models.CharField(max_length=255)
     price = models.FloatField()
     added_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="cart_items")
