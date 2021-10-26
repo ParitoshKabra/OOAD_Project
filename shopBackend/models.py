@@ -11,7 +11,7 @@ class Item(models.Model):
     price = models.FloatField()
     added_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="cart_items")
-    apiLink= models.CharField(max_length=255)
+    apiLink= models.TextField()
     adddedOn= models.DateTimeField(auto_now_add=True)
     category = models.CharField(default=None, max_length=255)
     priority= models.IntegerField(default= 0)
@@ -20,10 +20,6 @@ class Item(models.Model):
 
     availability_notif_enabled = models.BooleanField(default=False)
     price_notif_enabled = models.BooleanField(default=False)
-    
-
-
-
 
     def __str__(self):
         return f"{self.title}"
@@ -34,7 +30,7 @@ class Notification(models.Model):
     assoc_item = models.ForeignKey(
         Item, on_delete=models.CASCADE, related_name="item_notifs")
     notif_time = models.DateTimeField(auto_now_add=True)
-    is_viewed = models.BooleanField(default=False)
+    # is_viewed = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.notif_content[10]}..."
