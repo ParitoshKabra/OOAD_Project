@@ -16,6 +16,8 @@ class Item(models.Model):
     notif_enabled = models.BooleanField(default=False)
     apiLink= models.CharField(max_length=255)
     adddedOn= models.DateTimeField(auto_now_add=True)
+    priority= models.IntegerField(default= 0)
+    
 
 
 
