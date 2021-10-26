@@ -7,13 +7,19 @@ from django.contrib.auth.models import User
 
 class Item(models.Model):
     title = models.CharField(max_length=255)
-    descp = RichTextField()
+    # name = models.CharField(max_length=255)
     price = models.FloatField()
     added_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="cart_items")
-    availability_status = models.BooleanField(default=True)
+    apiLink= models.TextField()
+    adddedOn= models.DateTimeField(auto_now_add=True)
     category = models.CharField(default=None, max_length=255)
-    notif_enabled = models.BooleanField(default=False)
+    priority= models.IntegerField(default= 0)
+
+    availability_status = models.BooleanField(default=True)
+
+    availability_notif_enabled = models.BooleanField(default=False)
+    price_notif_enabled = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.title}"
@@ -24,7 +30,7 @@ class Notification(models.Model):
     assoc_item = models.ForeignKey(
         Item, on_delete=models.CASCADE, related_name="item_notifs")
     notif_time = models.DateTimeField(auto_now_add=True)
-    is_viewed = models.BooleanField(default=False)
+    # is_viewed = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.notif_content[10]}..."
