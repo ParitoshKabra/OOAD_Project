@@ -14,6 +14,9 @@ class Item(models.Model):
     availability_status = models.BooleanField(default=True)
     category = models.CharField(default=None, max_length=255)
     notif_enabled = models.BooleanField(default=False)
+    apiLink= models.CharField(max_length=255)
+    
+
 
     def __str__(self):
         return f"{self.title}"
