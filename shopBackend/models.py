@@ -15,7 +15,8 @@ class Item(models.Model):
     category = models.CharField(default=None, max_length=255)
     notif_enabled = models.BooleanField(default=False)
     apiLink= models.CharField(max_length=255)
-    
+    adddedOn= models.DateTimeField(auto_now_add=True)
+
 
 
     def __str__(self):
