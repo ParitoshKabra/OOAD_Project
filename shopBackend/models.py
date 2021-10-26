@@ -18,8 +18,8 @@ class Item(models.Model):
 
     availability_status = models.BooleanField(default=True)
 
-
-    notif_enabled = models.BooleanField(default=False)
+    availability_notif_enabled = models.BooleanField(default=False)
+    price_notif_enabled = models.BooleanField(default=False)
     
 
 
