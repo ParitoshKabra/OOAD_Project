@@ -9,10 +9,10 @@ from .models import *
 from .serializers import *
 from django.contrib.auth import login, authenticate, logout
 from rest_framework.decorators import api_view, permission_classes, action
-
 # Create your views here.
 from rest_framework.settings import api_settings
 from django.middleware.csrf import get_token
+from .fetchUtils import ajioScraping, flipkartWebScraping
 
 
 class CustomApiViewSet(viewsets.ModelViewSet):
@@ -120,3 +120,16 @@ def check_login(request):
     res['Access-Control-Allow-Origin'] = 'http://127.0.0.1:3000'
     res['Access-Control-Allow-Credentials'] = 'true'
     return res
+
+
+@api_view(("GET", ))
+def fetchItem(request):
+    url = request.GET.get("url")
+    item = None
+    if "ajio" in url:
+        item = ajioScraping.fetchFromAjio(url)
+    elif "flipkart" in url:
+        item = flipkartWebScraping.fetchFromFlipkart(url)
+    else:
+        return Response({"error": "Service unreachable at this url", "status": status.HTTP_404_NOT_FOUND})
+    return Response({"item": item, "status": status.HTTP_202_ACCEPTED})
