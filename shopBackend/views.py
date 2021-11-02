@@ -7,8 +7,12 @@ from rest_framework.response import Response
 import json
 from .models import *
 from .serializers import *
+from django.contrib.auth import login, authenticate, logout
+from rest_framework.decorators import api_view, permission_classes, action
+
 # Create your views here.
 from rest_framework.settings import api_settings
+from django.middleware.csrf import get_token
 
 
 class CustomApiViewSet(viewsets.ModelViewSet):
@@ -47,6 +51,12 @@ class CustomApiViewSet(viewsets.ModelViewSet):
     def perform_destroy(self, instance):
         instance.delete()
 
+    def dispatch(self, *args, **kwargs):
+        response = super(CustomApiViewSet, self).dispatch(*args, **kwargs)
+        response['Access-Control-Allow-Origin'] = 'http://127.0.0.1:3000'
+        response['Access-Control-Allow-Credentials'] = 'true'
+        return response
+
 
 class ItemApiViewSet(CustomApiViewSet):
     queryset = Item.objects.all()
@@ -74,3 +84,39 @@ class LogApiViewSet(viewsets.ModelViewSet):
     serializer_class = LogSerializer
 
     permission_classes = [IsAuthenticated, ]
+
+
+@api_view(("POST", ))
+def admin_login(request):
+    user = authenticate(username=request.data.get(
+        'username'), password=request.data.get('password'))
+    if user is not None:
+        login(request, user)
+        res = Response({"sessionid": request.session._session_key, "csrftoken": get_token(
+            request)}, status=status.HTTP_202_ACCEPTED)
+        return res
+    else:
+        return Response({"error": "user not found"}, status=status.HTTP_202_ACCEPTED)
+
+
+@api_view(("GET",))
+def get_csrf_token(request):
+    return Response({"csrftoken": get_token(request)}, status=status.HTTP_202_ACCEPTED)
+
+
+@api_view(("GET", ))
+def check_login(request):
+    print(request.user)
+    msg = {
+        "loggedin": True
+    }
+
+    # return JsonResponse({'status': 'successful'})
+    if not request.user.is_authenticated:
+        msg = {
+            "loggedin": False
+        }
+    res = Response(msg, status=200)
+    res['Access-Control-Allow-Origin'] = 'http://127.0.0.1:3000'
+    res['Access-Control-Allow-Credentials'] = 'true'
+    return res
