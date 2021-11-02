@@ -1,3 +1,4 @@
 ./shopBackend/__pycache__/*
 ./ooad_proj/__pycache__/*
 ./shopBackend/migrations/__pycache__/*
+./shopBackend/fetchUtils/__pycache__/*
