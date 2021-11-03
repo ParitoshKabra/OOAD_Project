@@ -2,3 +2,4 @@
 ./ooad_proj/__pycache__/*
 ./shopBackend/migrations/__pycache__/*
 ./shopBackend/fetchUtils/__pycache__/*
+./shopBackend/oauth.py
