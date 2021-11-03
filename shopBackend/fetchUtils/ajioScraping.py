@@ -20,4 +20,23 @@ def fetchFromAjio(url):
     name = json_obj['name']
 
     price = json_obj['offers']['price']
-    return {"name": name, "price": price}
+
+    ans1= soup.find_all('script')
+    res= ans1[12].string[34:-4]
+    index1= res.index("images")
+    index2= res.index("\"isShopTheLookAvailable\"")
+    res1=res[index1:index2]
+    index3= res1.index("images")
+    index4= res1.index("isReturnable")
+    data= json.loads(res1[index3+8:index4-2])
+
+    # image
+    image= data[0]["url"]
+
+    return {"title": name, "price": price, "apiLink": url, "image":image}
+
+
+
+
+    
+    

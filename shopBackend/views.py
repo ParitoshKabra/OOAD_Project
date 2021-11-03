@@ -12,9 +12,9 @@ from rest_framework.decorators import api_view, permission_classes, action
 # Create your views here.
 from rest_framework.settings import api_settings
 from django.middleware.csrf import get_token
-from .fetchUtils import ajioScraping, flipkartWebScraping
-from .oauth import exchange_code
 
+from .fetchUtils import ajioScraping, flipkartWebScraping, myntraScraping
+from .oauth import exchange_code
 
 class CustomApiViewSet(viewsets.ModelViewSet):
     custom_object = None
@@ -127,8 +127,15 @@ def check_login(request):
 def fetchItem(request):
     url = request.GET.get("url")
     item = None
+    User= request.user
     if "ajio" in url:
         item = ajioScraping.fetchFromAjio(url)
+        Item.objects.create(title= item["title"],apiLink= item["apiLink"], price=item["price"], added_by= User,image=item["image"])
+
+    elif "myntra" in url:
+        item = myntraScraping.fetchFromAjio(url)
+        Item.objects.create(title= item["title"],apiLink= item["apiLink"], price=item["price"], added_by= User, image=item["image"])
+        
     elif "flipkart" in url:
         item = flipkartWebScraping.fetchFromFlipkart(url)
     else:
