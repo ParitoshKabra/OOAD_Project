@@ -13,6 +13,7 @@ from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.settings import api_settings
 from django.middleware.csrf import get_token
 from .fetchUtils import ajioScraping, flipkartWebScraping
+from .oauth import exchange_code
 
 
 class CustomApiViewSet(viewsets.ModelViewSet):
@@ -133,3 +134,25 @@ def fetchItem(request):
     else:
         return Response({"error": "Service unreachable at this url", "status": status.HTTP_404_NOT_FOUND})
     return Response({"item": item, "status": status.HTTP_202_ACCEPTED})
+
+
+@api_view(("GET", ))
+def google_oauth(request):
+    try:
+        msg = "login already"
+        if request.user.is_authenticated:
+            return Response({"success": msg}, status=200)
+        code = request.GET.get('code')
+        print(code)
+        user = exchange_code(code)
+
+        user_ = authenticate(request=request, user_json=user)
+        print("inside oauth:", user_)
+        if user_ is not None:
+            login(request, user_)
+        return Response({"sessionid": request.session._session_key, "csrftoken": get_token(
+            request)}, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        print(e)
+        return Response({"error": e}, status=500)

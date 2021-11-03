@@ -74,6 +74,7 @@ LOGOUT_REDIRECT_URL = '/'
 ROOT_URLCONF = 'ooad_proj.urls'
 
 AUTHENTICATION_BACKENDS = [
+    'shopBackend.authentications.CheckUser',
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend'
 ]
