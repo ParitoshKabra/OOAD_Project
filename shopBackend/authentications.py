@@ -6,8 +6,10 @@ import json
 class CheckUser(ModelBackend):
     def authenticate(self, request, user_json):
         try:
+            print(user_json)
             user = User.objects.get(username=user_json['given_name'].lower(
-            ), first_name=user_json['given_name'], last_name=user_json['family_name'], email=user_json['email'])
+            ))
+            # , first_name=user_json['given_name'], last_name=user_json['family_name'], email=user_json['email'])
             return user
         except User.DoesNotExist:
             user = User.objects.create(

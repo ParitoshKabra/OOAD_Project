@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 # Create your models here.
 # we directly use django User as no extra specifications are required
 
-
 class Item(models.Model):
     title = models.CharField(max_length=255)
     # name = models.CharField(max_length=255)
@@ -51,7 +50,7 @@ class Comment(models.Model):
 class Log(models.Model):
     history_user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="history_actions")
-    history_log = models.CharField(max_length=511)
+    history_log = models.TextField()
 
     history_time = models.DateTimeField(auto_now_add=True)
 
