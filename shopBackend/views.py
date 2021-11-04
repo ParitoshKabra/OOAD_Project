@@ -66,6 +66,11 @@ class ItemApiViewSet(CustomApiViewSet):
     permission_classes = [IsAuthenticated, ]
     custom_object = "Item"
 
+class UserApiViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated, ]
+
 
 class NotificationApiViewSet(CustomApiViewSet):
     queryset = Notification.objects.all()
