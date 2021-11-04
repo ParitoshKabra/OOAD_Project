@@ -41,3 +41,15 @@ class LogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Log
         fields = '__all__'
+
+class UserSerializer(serializers.ModelSerializer):
+    cart_items = ItemSerializer(many=True, read_only=True)
+    history_actions = LogSerializer(many=True, read_only=True)
+    # since we will never create user using this serializer
+    username = serializers.CharField(read_only=True)
+    id = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['cart_items', 'history_actions',
+                  'username', 'first_name', 'last_name', 'id']
