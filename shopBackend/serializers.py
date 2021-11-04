@@ -33,7 +33,6 @@ class ItemSerializer(serializers.ModelSerializer):
         model = Item
         fields = '__all__'
 
-
 class LogSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     history_user = serializers.PrimaryKeyRelatedField(

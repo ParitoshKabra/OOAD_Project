@@ -15,6 +15,7 @@ from django.middleware.csrf import get_token
 
 from .fetchUtils import ajioScraping, flipkartWebScraping, myntraScraping
 from .oauth import exchange_code
+from django.contrib.auth.models import User
 
 class CustomApiViewSet(viewsets.ModelViewSet):
     custom_object = None
@@ -125,16 +126,29 @@ def check_login(request):
 
 @api_view(("GET", ))
 def fetchItem(request):
+    print(request.data)
+    print(request.body)
+
+
     url = request.GET.get("url")
     item = None
-    User= request.user
+    User1= request.user.id
+    type(User1)
+    print(User1)
     if "ajio" in url:
         item = ajioScraping.fetchFromAjio(url)
-        Item.objects.create(title= item["title"],apiLink= item["apiLink"], price=item["price"], added_by= User,image=item["image"])
+        item["added_by"]= User1
+        # print(User.objects.get(username=User))
+        # Item.objects.create(title= item["title"],apiLink= item["apiLink"], price=item["price"], added_by= User,image=item["image"])
+        # request1= request
+        # request1.data= item
+        # ItemApiViewSet.create(request1)
+        # return item
 
     elif "myntra" in url:
         item = myntraScraping.fetchFromAjio(url)
-        Item.objects.create(title= item["title"],apiLink= item["apiLink"], price=item["price"], added_by= User, image=item["image"])
+        # Item.objects.create(title= item["title"],apiLink= item["apiLink"], price=item["price"], added_by= User, image=item["image"])
+        # return item
         
     elif "flipkart" in url:
         item = flipkartWebScraping.fetchFromFlipkart(url)
