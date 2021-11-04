@@ -1,7 +1,7 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework import status
 from rest_framework.response import Response
 import json
@@ -16,6 +16,7 @@ from django.middleware.csrf import get_token
 from .fetchUtils import ajioScraping, flipkartWebScraping, myntraScraping
 from .oauth import exchange_code
 from django.contrib.auth.models import User
+
 
 class CustomApiViewSet(viewsets.ModelViewSet):
     custom_object = None
@@ -65,6 +66,12 @@ class ItemApiViewSet(CustomApiViewSet):
     serializer_class = ItemSerializer
     permission_classes = [IsAuthenticated, ]
     custom_object = "Item"
+
+
+class UserApiViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated, ]
 
 
 class NotificationApiViewSet(CustomApiViewSet):
@@ -129,15 +136,14 @@ def fetchItem(request):
     print(request.data)
     print(request.body)
 
-
     url = request.GET.get("url")
     item = None
-    User1= request.user.id
+    User1 = request.user.id
     type(User1)
     print(User1)
     if "ajio" in url:
         item = ajioScraping.fetchFromAjio(url)
-        item["added_by"]= User1
+        item["added_by"] = User1
         # print(User.objects.get(username=User))
         # Item.objects.create(title= item["title"],apiLink= item["apiLink"], price=item["price"], added_by= User,image=item["image"])
         # request1= request
@@ -149,7 +155,7 @@ def fetchItem(request):
         item = myntraScraping.fetchFromAjio(url)
         # Item.objects.create(title= item["title"],apiLink= item["apiLink"], price=item["price"], added_by= User, image=item["image"])
         # return item
-        
+
     elif "flipkart" in url:
         item = flipkartWebScraping.fetchFromFlipkart(url)
     else:

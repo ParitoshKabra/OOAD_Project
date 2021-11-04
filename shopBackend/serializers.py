@@ -1,5 +1,6 @@
 from .models import *
 from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 
 from rest_framework import serializers
 
@@ -33,6 +34,7 @@ class ItemSerializer(serializers.ModelSerializer):
         model = Item
         fields = '__all__'
 
+
 class LogSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     history_user = serializers.PrimaryKeyRelatedField(
@@ -41,3 +43,16 @@ class LogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Log
         fields = '__all__'
+
+
+class UserSerializer(serializers.ModelSerializer):
+    cart_items = ItemSerializer(many=True, read_only=True)
+    history_actions = LogSerializer(many=True, read_only=True)
+    # since we will never create user using this serializer
+    username = serializers.CharField(read_only=True)
+    id = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['cart_items', 'history_actions',
+                  'username', 'first_name', 'last_name', 'id']
