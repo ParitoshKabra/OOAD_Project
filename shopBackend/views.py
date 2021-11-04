@@ -1,7 +1,7 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework import status
 from rest_framework.response import Response
 import json
@@ -182,3 +182,11 @@ def google_oauth(request):
     except Exception as e:
         print(e)
         return Response({"error": e}, status=500)
+
+@api_view(("GET", ))
+def info(request):
+    info = UserSerializer(request.user)
+    res = Response(info.data, status=status.HTTP_202_ACCEPTED)
+    res['Access-Control-Allow-Origin'] = 'http://127.0.0.1:3000'
+    res['Access-Control-Allow-Credentials'] = 'true'
+    return res

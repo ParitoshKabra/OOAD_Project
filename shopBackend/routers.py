@@ -1,6 +1,6 @@
 from rest_framework import routers
 from shopBackend.models import Log
-from .views import ItemApiViewSet, LogApiViewSet, CommentApiViewSet, NotificationApiViewSet
+from .views import ItemApiViewSet, LogApiViewSet, CommentApiViewSet, NotificationApiViewSet, UserApiViewSet
 router = routers.DefaultRouter()
 
 router.register("items", ItemApiViewSet)
