@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 # Create your models here.
 # we directly use django User as no extra specifications are required
 
-
 class Item(models.Model):
     title = models.CharField(max_length=255)
     # name = models.CharField(max_length=255)
@@ -13,8 +12,10 @@ class Item(models.Model):
         User, on_delete=models.CASCADE, related_name="cart_items")
     apiLink= models.TextField()
     adddedOn= models.DateTimeField(auto_now_add=True)
-    category = models.CharField(default=None, max_length=255)
+    category = models.CharField(default="normal", max_length=255)
     priority= models.IntegerField(default= 0)
+
+    image= models.TextField(null=True)
 
     availability_status = models.BooleanField(default=True)
 
@@ -49,7 +50,7 @@ class Comment(models.Model):
 class Log(models.Model):
     history_user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="history_actions")
-    history_log = models.CharField(max_length=511)
+    history_log = models.TextField()
 
     history_time = models.DateTimeField(auto_now_add=True)
 
