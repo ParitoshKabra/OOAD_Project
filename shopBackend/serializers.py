@@ -1,5 +1,6 @@
 from .models import *
 from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 
 from rest_framework import serializers
 
@@ -32,6 +33,7 @@ class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = '__all__'
+
 
 class LogSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)

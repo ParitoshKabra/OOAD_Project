@@ -7,4 +7,5 @@ router.register("items", ItemApiViewSet)
 router.register("comments", CommentApiViewSet)
 router.register("notifications", NotificationApiViewSet)
 router.register("logs", LogApiViewSet)
+
 router.register("users", UserApiViewSet)
