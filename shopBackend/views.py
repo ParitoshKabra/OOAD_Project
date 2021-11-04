@@ -67,6 +67,11 @@ class ItemApiViewSet(CustomApiViewSet):
     permission_classes = [IsAuthenticated, ]
     custom_object = "Item"
 
+class UserApiViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated, ]
+
 
 class UserApiViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
     queryset = User.objects.all()
@@ -183,3 +188,11 @@ def google_oauth(request):
     except Exception as e:
         print(e)
         return Response({"error": e}, status=500)
+
+@api_view(("GET", ))
+def info(request):
+    info = UserSerializer(request.user)
+    res = Response(info.data, status=status.HTTP_202_ACCEPTED)
+    res['Access-Control-Allow-Origin'] = 'http://127.0.0.1:3000'
+    res['Access-Control-Allow-Credentials'] = 'true'
+    return res

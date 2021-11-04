@@ -44,7 +44,6 @@ class LogSerializer(serializers.ModelSerializer):
         model = Log
         fields = '__all__'
 
-
 class UserSerializer(serializers.ModelSerializer):
     cart_items = ItemSerializer(many=True, read_only=True)
     history_actions = LogSerializer(many=True, read_only=True)
