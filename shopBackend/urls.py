@@ -10,6 +10,7 @@ urlpatterns = [
     path('admin_login', views.admin_login, name='admin_login'),
     path('check_login', views.check_login, name='login'),
     path('fetch_item', views.fetchItem, name='fetch_item'),
-    path('google_oauth', views.google_oauth, name='google_oauth')
+    path('google_oauth', views.google_oauth, name='google_oauth'),
+    path('log_out', views.logout, name='logout'),
 
 ]

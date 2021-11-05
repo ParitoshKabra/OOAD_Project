@@ -13,7 +13,7 @@ class CheckUser(ModelBackend):
         except User.DoesNotExist:
             user = User.objects.create(
                 username=user_json['email'].lower(
-                ), first_name=user_json['given_name'], last_name=user_json['family_name'], name=f"{user_json['given_name']} {user_json['family_name']}"
+                ), first_name=user_json['given_name'], last_name=user_json['family_name']
             )
             return user
 

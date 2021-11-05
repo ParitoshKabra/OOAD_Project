@@ -67,6 +67,7 @@ class ItemApiViewSet(CustomApiViewSet):
     permission_classes = [IsAuthenticated, ]
     custom_object = "Item"
 
+
 class UserApiViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -138,17 +139,11 @@ def check_login(request):
 
 @api_view(("GET", ))
 def fetchItem(request):
-    print(request.data)
-    print(request.body)
-
     url = request.GET.get("url")
     item = None
-    User1 = request.user.id
-    type(User1)
-    print(User1)
     if "ajio" in url:
         item = ajioScraping.fetchFromAjio(url)
-        item["added_by"] = User1
+        item["added_by"] = request.user.id
         # print(User.objects.get(username=User))
         # Item.objects.create(title= item["title"],apiLink= item["apiLink"], price=item["price"], added_by= User,image=item["image"])
         # request1= request
@@ -157,7 +152,8 @@ def fetchItem(request):
         # return item
 
     elif "myntra" in url:
-        item = myntraScraping.fetchFromAjio(url)
+        item = myntraScraping.fetchFromMyntra(url)
+        item["added_by"] = request.user.id
         # Item.objects.create(title= item["title"],apiLink= item["apiLink"], price=item["price"], added_by= User, image=item["image"])
         # return item
 
@@ -165,7 +161,10 @@ def fetchItem(request):
         item = flipkartWebScraping.fetchFromFlipkart(url)
     else:
         return Response({"error": "Service unreachable at this url", "status": status.HTTP_404_NOT_FOUND})
-    return Response({"item": item, "status": status.HTTP_202_ACCEPTED})
+    if item is not None:
+        return Response({"item": item, "status": status.HTTP_202_ACCEPTED})
+    else:
+        return Response({"error": "Item not found", "status": status.HTTP_404_NOT_FOUND})
 
 
 @api_view(("GET", ))
@@ -189,6 +188,7 @@ def google_oauth(request):
         print(e)
         return Response({"error": e}, status=500)
 
+
 @api_view(("GET", ))
 def info(request):
     info = UserSerializer(request.user)
@@ -196,3 +196,9 @@ def info(request):
     res['Access-Control-Allow-Origin'] = 'http://127.0.0.1:3000'
     res['Access-Control-Allow-Credentials'] = 'true'
     return res
+
+
+@api_view(("GET",))
+def log_out(request):
+    logout(request)
+    return Response({"msg": "logged out successfully"}, status=status.HTTP_202_ACCEPTED)

@@ -3,3 +3,7 @@
 ./shopBackend/migrations/__pycache__/*
 ./shopBackend/fetchUtils/__pycache__/*
 ./shopBackend/oauth.py
+./shopBackend/oauthUtils/__pycache__/*
+./shopBackend/oauthUtils/constants.py
+
+
