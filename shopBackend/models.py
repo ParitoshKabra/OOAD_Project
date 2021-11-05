@@ -24,7 +24,7 @@ class Item(models.Model):
     discount_offers = models.TextField(null=True)
     availability_notif_enabled = models.BooleanField(default=False)
     price_notif_enabled = models.BooleanField(default=False)
-
+    deleted = models.BooleanField(default=False)
     def __str__(self):
         return f"{self.title}"
 

@@ -107,7 +107,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ooad_proj',
         'USER': 'ooad_user',
-        'PASSWORD': 'password@007',
+        'PASSWORD': 'Password@007',
         'HOST': '127.0.0.1',
         'PORT': '3306',
         'OPTIONS': {

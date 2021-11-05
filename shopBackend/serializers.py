@@ -29,7 +29,8 @@ class ItemSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     added_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     item_comments = CommentSerializer(read_only=True, many=True)
-
+    item_notifs = NotificationSerializer(read_only=True, many=True)
+    
     class Meta:
         model = Item
         fields = '__all__'
