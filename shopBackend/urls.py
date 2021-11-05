@@ -12,5 +12,5 @@ urlpatterns = [
     path('fetch_item', views.fetchItem, name='fetch_item'),
     path('google_oauth', views.google_oauth, name='google_oauth'),
     path('log_out', views.logout, name='logout'),
-
+    path('notifs', views.get_ext_notifs, name="ext_notifs")
 ]

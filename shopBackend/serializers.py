@@ -35,6 +35,23 @@ class ItemSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ItemForNotificationSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    added_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
+    class Meta:
+        model = Item
+        exclude = ['item_comments', 'item_notifs', 'item_external_notifs']
+
+
+class ExternalNotificationSerializer(serializers.ModelSerializer):
+    assoc_item = ItemForNotificationSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = ExternalNotification
+        fields = '__all__'
+
+
 class LogSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     history_user = serializers.PrimaryKeyRelatedField(
@@ -43,6 +60,7 @@ class LogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Log
         fields = '__all__'
+
 
 class UserSerializer(serializers.ModelSerializer):
     cart_items = ItemSerializer(many=True, read_only=True)
