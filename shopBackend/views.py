@@ -46,10 +46,12 @@ class CustomApiViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
+        print(request.user)
         Log.objects.create(history_log=json.dumps(
-            {"info": "deleted", "object": self.custom_object, "data": serializer.data}))
-        print(f"{self.custom_object} delete audited to logs!",
-              history_user=request.user)
+            {"info": "deleted", "object": self.custom_object, "data": serializer.data}),
+            history_user=request.user)
+
+        print(f"{self.custom_object} delete audited to logs!")
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -212,37 +214,40 @@ def log_out(request):
 
 def get_ext_notif_object(item, info, content):
     data = {
-        "assoc_item": item,
+        "assoc_item": item.id,
         "ext_notif_info": info,
         "ext_notif_content": content
     }
-    return ExternalNotification.objects.create(**data)
+    print(item)
+    ExternalNotification.objects.create(**data)
 
 
 @api_view(("GET",))
-@permission_classes(['IsAuthenticated', ])
+@permission_classes([IsAuthenticated, ])
 def get_ext_notifs(request):
     items = Item.objects.all()
     for item in items:
-        if item.availability_notif_enabled == True or item.price_notif_enabled == True:
-            item_pres = getItem(item.apiLink)
+        try:
+            if item.availability_notif_enabled == True or item.price_notif_enabled == True:
+                item_pres = getItem(item.apiLink)
+                if item_pres.price != item.price:
+                    if item.price_notif_enabled == True:
+                        get_ext_notif_object(
+                            item, "price", f"Changed price: from {item.price} to {item_pres.price}")
+                else:
+                    if item_pres.availability_status != item.availability_status:
+                        get_ext_notif_object(
+                            item, "available", not item.availability_status)
 
-            if item_pres.price != item.price:
-                if item.price_notif_enabled == True:
+            elif item.discount_schemes_notif_enabled:
+                item_pres = getItem(item.apiLink)
+                if item_pres.discount_offers != item.discount_offers:
                     get_ext_notif_object(
-                        item, "price", f"Changed price: from {item.price} to {item_pres.price}")
-            else:
-                if item_pres.availability_status != item.availability_status:
-                    get_ext_notif_object(
-                        item, "available", not item.availability_status)
+                        item, "discount", item_pres.discount_offers)
+        except Exception as e:
+            print(e)
 
-        elif item.discount_schemes_notif_enabled:
-            item_pres = getItem(item.apiLink)
-            if item_pres.discount_offers != item.discount_offers:
-                get_ext_notif_object(
-                    item, "discount", item_pres.discount_offers)
-
-    ext_notif = ExternalNotification.objects.all()
+    ext_notif = ExternalNotification.objects.get_queryset().order_by('id')
     paginator = PageNumberPagination()
     paginator.page_size = 5
     result_page = paginator.paginate_queryset(ext_notif, request)

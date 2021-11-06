@@ -30,7 +30,7 @@ class ItemSerializer(serializers.ModelSerializer):
     added_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     item_comments = CommentSerializer(read_only=True, many=True)
     item_notifs = NotificationSerializer(read_only=True, many=True)
-    
+
     class Meta:
         model = Item
         fields = '__all__'
@@ -42,15 +42,19 @@ class ItemForNotificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Item
-        exclude = ['item_comments', 'item_notifs', 'item_external_notifs']
+        fields = "__all__"
 
 
 class ExternalNotificationSerializer(serializers.ModelSerializer):
-    assoc_item = ItemForNotificationSerializer(read_only=True, many=True)
+    assoc_item = ItemForNotificationSerializer(
+        read_only=True)
+    # assoc_item = serializers.PrimaryKeyRelatedField(
+    #     queryset=Item.objects.all())
 
     class Meta:
         model = ExternalNotification
         fields = '__all__'
+        depth = 1
 
 
 class LogSerializer(serializers.ModelSerializer):

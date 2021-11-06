@@ -25,6 +25,7 @@ class Item(models.Model):
     availability_notif_enabled = models.BooleanField(default=False)
     price_notif_enabled = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
+
     def __str__(self):
         return f"{self.title}"
 
@@ -53,6 +54,9 @@ class ExternalNotification(models.Model):
         else:
             raise ValidationError(
                 "available, price, discount are only support for ext_notif_info")
+
+    def __str__(self):
+        return f"{self.assoc_item.title[:10]}..."
 
 
 class Comment(models.Model):
