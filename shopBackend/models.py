@@ -24,7 +24,7 @@ class Item(models.Model):
     discount_offers = models.TextField(null=True)
     availability_notif_enabled = models.BooleanField(default=False)
     price_notif_enabled = models.BooleanField(default=False)
-    deleted = models.BooleanField(default=False)
+    # deleted = models.BooleanField(default=False)
     def __str__(self):
         return f"{self.title}"
 
@@ -33,7 +33,7 @@ class Notification(models.Model):
     notif_content = models.TextField()
     assoc_item = models.ForeignKey(
         Item, on_delete=models.CASCADE, related_name="item_notifs")
-    notif_time = models.DateTimeField(auto_now_add=True)
+    notif_time = models.DateTimeField(auto_now_add=False)
     # is_viewed = models.BooleanField(default=False)
 
     def __str__(self):
