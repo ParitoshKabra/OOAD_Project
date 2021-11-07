@@ -99,6 +99,12 @@ class LogApiViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, ]
 
 
+class ItemCommentViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
+    queryset = Item.objects.all()
+    serializer_class = ItemCommentSerializer
+    permission_classes = [IsAuthenticated, ]
+
+
 def getItem(url):
     item = None
     if "ajio" in url:
@@ -225,7 +231,7 @@ def get_ext_notif_object(item, info, content):
 @api_view(("GET",))
 @permission_classes([IsAuthenticated, ])
 def get_ext_notifs(request):
-    items = Item.objects.all()
+    items = Item.objects.filter(added_by=request.user)
     for item in items:
         try:
             if item.availability_notif_enabled == True or item.price_notif_enabled == True:

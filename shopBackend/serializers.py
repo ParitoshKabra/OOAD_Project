@@ -78,3 +78,12 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['cart_items', 'history_actions',
                   'username', 'first_name', 'last_name', 'id']
+
+
+class ItemCommentSerializer(serializers.ModelSerializer):
+    item_comments = CommentSerializer(many=True, read_only=True)
+    item_notifs = NotificationSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Item
+        fields = ['item_comments', 'item_notifs']
