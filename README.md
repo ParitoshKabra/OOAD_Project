@@ -1,5 +1,5 @@
 # Backend For Shopping Manager
-##### Built on Django and Django REST Framework
+## Built on Django and Django REST Framework
 
 To setup the local backend follow the below steps:
 
