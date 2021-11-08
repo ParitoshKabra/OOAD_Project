@@ -85,6 +85,15 @@ class NotificationApiViewSet(CustomApiViewSet):
     custom_object = "Notifications"
 
 
+class ReminderApiViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+    pagination_class = PageNumberPagination
+    serializer_class = ReminderSerializer
+    permission_classes = [IsAuthenticated, ]
+
+    def get_queryset(self):
+        return Notification.objects.filter(assoc_item__in=Item.objects.filter(added_by=self.request.user))
+
+
 class CommentApiViewSet(CustomApiViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
@@ -231,8 +240,9 @@ def get_ext_notif_object(item, info, content):
 @api_view(("GET",))
 @permission_classes([IsAuthenticated, ])
 def get_ext_notifs(request):
+    pg = int(request.GET.get("page", None))
     items = Item.objects.filter(added_by=request.user)
-    for item in items:
+    for item in items[5*(pg-1): 5*pg]:
         try:
             if item.availability_notif_enabled == True or item.price_notif_enabled == True:
                 item_pres = getItem(item.apiLink)

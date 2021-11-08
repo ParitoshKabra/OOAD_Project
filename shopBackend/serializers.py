@@ -57,6 +57,16 @@ class ExternalNotificationSerializer(serializers.ModelSerializer):
         depth = 1
 
 
+class ReminderSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    assoc_item = ItemForNotificationSerializer(
+        read_only=True)
+
+    class Meta:
+        model = Notification
+        fields = '__all__'
+
+
 class LogSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     history_user = serializers.PrimaryKeyRelatedField(
