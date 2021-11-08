@@ -14,7 +14,7 @@ To setup the local backend follow the below steps:
 3) On Ubuntu and Linux systems, ```sudo service mysql start``` to start mysql server at the default port 3306
 4) Create a virtual environment, ```python3 -m venv <env_name>```
 5) Run ```pip install -r requirements.txt``` to install the requisite tools.
-6) Run ```python3 manage.py makemigrations; python3 manage.py migrate```
+6) Run ```python3 manage.py makemigrations; python3 manage.py makemigrations shopBackend; python3 manage.py migrate```
     - Note use **python** in place of **python3** for windows.
 7) ##### All set! 
 You can start the development server as: ```python3 manage.py runserver```
