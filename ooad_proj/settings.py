@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-
+from .config import *
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -105,9 +105,9 @@ WSGI_APPLICATION = 'ooad_proj.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ooad_proj',
-        'USER': 'ooad_user',
-        'PASSWORD': 'password@007',
+        'NAME': db_name,
+        'USER': db_user,
+        'PASSWORD': db_pass,
         'HOST': '127.0.0.1',
         'PORT': '3306',
         'OPTIONS': {
@@ -172,6 +172,8 @@ CSRF_COOKIE_HTTPONLY = True
 CORS_ORIGIN_WHITELIST = [
     'http://127.0.0.1:3000',
     'http://127.0.0.1:8000',
+    'http://localhost:3000',
+    'http://localhost:8000'
 ]
 CORS_ORIGIN_ALLOW_ALL = True
 
